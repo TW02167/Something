@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hong Kong Open World - Main Menu</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #0b0f19;
+            color: #ffffff;
+        }
+
+        /* Background neon grid effect */
+        .bg-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, rgba(11, 15, 25, 0.8) 0%, rgba(5, 7, 12, 0.95) 100%),
+                        radial-gradient(circle at 50% 30%, rgba(255, 0, 128, 0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 80% 80%, rgba(0, 243, 255, 0.1) 0%, transparent 50%);
+            z-index: 1;
+        }
+
+        /* Screen Wrapper */
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            transition: opacity 0.8s ease-in-out;
+        }
+
+        .hidden {
+            opacity: 0;
+            pointer-events: none;
+            display: none !important;
+        }
+
+        /* --- MAIN MENU STYLES --- */
+        #main-menu {
+            align-items: flex-start;
+            padding-left: 8%;
+        }
+
+        .game-subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 6px;
+            color: #00f3ff;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .game-title {
+            font-size: 5rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            line-height: 1;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #ffffff 40%, #ff0080 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 25px rgba(255, 0, 128, 0.4));
+        }
+
+        .menu-options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .menu-btn {
+            background: transparent;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            width: 260px;
+        }
+
+        .menu-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 243, 255, 0.2), transparent);
+            transition: 0.5s;
+        }
+
+        .menu-btn:hover {
+            border-color: #00f3ff;
+            color: #00f3ff;
+            padding-left: 45px;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.3);
+        }
+
+        .menu-btn:hover::before {
+            left: 100%;
+        }
+
+        /* --- LOADING SCREEN STYLES --- */
+        #loading-screen {
+            background: #05070c;
+            justify-content: flex-end;
+            align-items: stretch;
+            padding: 50px;
+        }
+
+        .loading-content {
+            max-width: 600px;
+            margin-bottom: 20px;
+        }
+
+        .loading-header {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            letter-spacing: 2px;
+            color: #ffffff;
+        }
+
+        .loading-tip {
+            font-size: 0.95rem;
+            color: #8b9bb4;
+            margin-bottom: 25px;
+            min-height: 1.5em;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, #00f3ff, #ff0080);
+            transition: width 0.2s ease;
+            box-shadow: 0 0 10px #00f3ff;
+        }
+
+        .progress-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: #8b9bb4;
+            letter-spacing: 1px;
+        }
+
+        /* --- GAMEPLAY PLACEHOLDER --- */
+        #gameplay-screen {
+            background: radial-gradient(circle at center, #1a233a 0%, #05070c 100%);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        #gameplay-screen h1 {
+            font-size: 3rem;
+            color: #00f3ff;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.5);
+        }
+
+        #gameplay-screen p {
+            color: #8b9bb4;
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-container"></div>
+
+    <!-- MAIN MENU -->
+    <div id="main-menu" class="screen">
+        <div class="game-subtitle">Next-Gen Browser Open World</div>
+        <div class="game-title">Hong Kong<br>Underground</div>
+        <div class="menu-options">
+            <button class="menu-btn" onclick="startLoading()">Start Game</button>
+            <button class="menu-btn" onclick="alert('Settings menu coming soon!')">Settings</button>
+            <button class="menu-btn" onclick="alert('Credits: Built for HK Street Racing fans!')">Credits</button>
+        </div>
+    </div>
+
+    <!-- LOADING SCREEN -->
+    <div id="loading-screen" class="screen hidden">
+        <div class="loading-content">
+            <div class="loading-header" id="loading-status">LOADING DISTRICTS...</div>
+            <div class="loading-tip" id="tip-text">Tip: Watch out for red taxis and police cruisers weaving through Victoria Harbour highways.</div>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-stats">
+                <span id="asset-text">Streaming Victoria Harbour Assets...</span>
+                <span id="percentage-text">0%</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAMEPLAY PLACEHOLDER -->
+    <div id="gameplay-screen" class="screen hidden">
+        <h1>Welcome to Hong Kong</h1>
+        <p>Three.js 3D Engine & City Map would initialize here next.</p>
+        <button class="menu-btn" style="margin-top: 30px;" onclick="location.reload()">Back to Menu</button>
+    </div>
+
+    <script>
+        const tips = [
+            "Tip: Watch out for red taxis and police cruisers weaving through Victoria Harbour highways.",
+            "Tip: Drift down the steep hairpin turns of Stubbs Road for maximum style points.",
+            "Tip: Visit the Midnight Garage to upgrade your JDM widebody kits.",
+            "Tip: Neon lights reflect dynamically on wet asphalt after a heavy tropical rainstorm."
+        ];
+
+        function startLoading() {
+            // Hide menu, show loading screen
+            document.getElementById('main-menu').classList.add('hidden');
+            document.getElementById('loading-screen').classList.remove('hidden');
+
+            // Randomize tip
+            const randomTip = tips[Math.floor(Math.random() * tips.length)];
+            document.getElementById('tip-text').innerText = randomTip;
+
+            let progress = 0;
+            const progressBar = document.getElementById('progress-bar');
+            const percentageText = document.getElementById('percentage-text');
+            const statusText = document.getElementById('loading-status');
+            const assetText = document.getElementById('asset-text');
+
+            const loadingInterval = setInterval(() => {
+                // Random increment to simulate real loading speeds
+                progress += Math.floor(Math.random() * 8) + 3;
+                
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(loadingInterval);
+                    
+                    // Transition to gameplay after a short pause at 100%
+                    setTimeout(() => {
+                        document.getElementById('loading-screen').classList.add('hidden');
+                        document.getElementById('gameplay-screen').classList.remove('hidden');
+                    }, 500);
+                }
+
+                // Update UI texts based on progress steps
+                if (progress > 75) {
+                    statusText.innerText = "SPAWNING VEHICLES & TRAFFIC...";
+                    assetText.innerText = "Configuring JDM Physics & Handling...";
+                } else if (progress > 40) {
+                    statusText.innerText = "GENERATING VERTICAL CITY...";
+                    assetText.innerText = "Building Neon Signs & Skyscrapers...";
+                }
+
+                progressBar.style.width = progress + '%';
+                percentageText.innerText = progress + '%';
+            }, 120);
+        }
+    </script>
+</body>
+</html>
